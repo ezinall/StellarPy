@@ -17,8 +17,8 @@ class GLGridItem(GLGraphicsItem):
     """
 
     def __init__(self, size=None, color=None, antialias=True, glOptions='translucent'):
-        super(GLGridItem).__init__()
-        # GLGraphicsItem.__init__(self)
+        # super(GLGridItem).__init__()
+        GLGraphicsItem.__init__(self)
         self.setGLOptions(glOptions)
         self.antialias = antialias
         if size is None:

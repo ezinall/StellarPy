@@ -64,12 +64,12 @@ class Object:
             z.append(r * (sin_u * sin(radians(i))))
             # V1 = sqrt(r / p) * e * sinv
             # V2 = sqrt(r / p) * (1 + e * cosv)
-        # self.X = list(reversed(x)) if self.at > 90 else x
-        # self.Y = list(reversed(y)) if self.at > 90 else y
-        # self.Z = list(reversed(z)) if self.at > 90 else z
-        self.X = x
-        self.Y = y
-        self.Z = z
+        self.X = list(reversed(x)) if self.at > 90 else x
+        self.Y = list(reversed(y)) if self.at > 90 else y
+        self.Z = list(reversed(z)) if self.at > 90 else z
+        # self.X = x
+        # self.Y = y
+        # self.Z = z
         # F = G * SUN.M * self.m / r ** 2  # сила гравитационного притяжения
         # p = a * (1 - e ** 2)  # фокальный параметр
         # b = sqrt(a * p)  # малая полуось
@@ -99,14 +99,14 @@ class Object:
     def dwarf_planet(self, orbit=True, way=True, size=6, width=1):
         return self.paint(orbit=orbit, way=way, size=size, width=width)
 
-    def small_body(self, orbit=False, way=False, size=2, width=.25):
+    def small_body(self, orbit=False, way=False, size=1.5, width=.25):
         return self.paint(orbit=orbit, way=way, size=size, width=width)
 
     def satellite(self, major, orbit=False, way=False, size=4, width=1):
         pass
 
-    def paint(self, orbit=True, way=True, size=4, width=1.0):
-        self.pos = gl.GLScatterPlotItem(pos=array([self.X[0], self.Y[0], self.Z[0]]), size=size, color=self.color)
+    def paint(self, orbit=True, way=True, size=4.0, width=1.0):
+        self.pos = gl.GLScatterPlotItem(pos=array([self.X[-1], self.Y[-1], self.Z[-1]]), size=size, color=self.color)
         self.pos.setGLOptions('translucent')
         plot_wid.addItem(self.pos)
         pts_way = vstack([(self.X[-1], self.X[-1]), (self.Y[-1], self.Y[-1]), (self.Z[-1], 0)]).transpose()
@@ -222,9 +222,8 @@ BODIES = [MERCURY, VENUS, EARTH, MARS, JUPITER, SATURN, URANUS, NEPTUNE, CARES, 
 try:
     with open('SBD.csv') as csvfile:
         objects = csv.reader(csvfile)
+        next(objects)
         for row in objects:
-            if row[7] == 'name':
-                continue
             if row[7]:
                 try:
                     BODIES.append(Object(row[7], m=1e20, a=float(row[0]) * au, e=float(row[1]), i=float(row[2]),
@@ -244,7 +243,7 @@ j = 0
 def move():
     global j
     for l in range(len(BODIES)):
-        if BODIES[l].X:
+        if len(BODIES[l].X) > j:
             BODIES[l].pos.setData(pos=array([BODIES[l].X[j], BODIES[l].Y[j], BODIES[l].Z[j]]))
             pts_way = vstack([(BODIES[l].X[j], BODIES[l].X[j]),
                               (BODIES[l].Y[j], BODIES[l].Y[j]),

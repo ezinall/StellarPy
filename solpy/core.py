@@ -1,4 +1,6 @@
-from numpy import sqrt, radians, sin, cos, pi
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+import numpy as np
 from datetime import datetime
 
 
@@ -6,9 +8,10 @@ class Star:
     def __init__(self, object_name, m, color=(1, 1, 0, 1)):
         self.name = object_name
         self.M = m  # масса
-        self.x = 0
-        self.y = 0
-        self.z = 0
+        self.x = [0]
+        self.y = [0]
+        self.z = [0]
+        self.color = color
         # pos = gl.GLScatterPlotItem(pos=array([0, 0, 0]), color=color, size=10)
         # pos.setGLOptions('translucent')
         # plot_wid.addItem(pos)
@@ -17,11 +20,11 @@ class Star:
 class Body:
     def __init__(self, object_name, major, m, a, e, i, w, O=0, M=0, at=0, JD=2451545.0, color=(.5, .5, .5, 1)):
         """
-        :param str object_name: название
-        :param tuple color: цвет точки
-        :param JD: юлианская дата 2451545.0
-        :param major: центр масс
-        :param float m: масса
+        :param str object_name: name, название
+        :param tuple color: color point, цвет точки
+        :param JD: julian date, юлианская дата 2451545.0
+        :param major: center of mass, центр масс
+        :param float m: mass, масса
         :param float at: наклон оси
         :param float a: большая полуось КМ
         :param float e: ексцентриситет ε e=c/a
@@ -37,28 +40,28 @@ class Body:
         self.m = m
         self.at = at
         self.JD = JD
-        self.orbit = None
-        self.guide = None
+        self.orbit = True
+        self.guide = True
         self.size = None
         self.width = None
         k = G * (self.major.M + m)  # µ гравитационный параметр
-        n = sqrt(k / a ** 3)  # среднее движение
-        self.T = 2 * pi / n  # период обращения sqrt(((4 * pi**2)/(G * (SUN.M + m))) * a**3) Кеплер 3
+        n = np.sqrt(k / a ** 3)  # среднее движение
+        self.T = 2 * np.pi / n  # период обращения sqrt(((4 * pi**2)/(G * (SUN.M + m))) * a**3) Кеплер 3
         x, y, z = [], [], []
-        E = radians(M)
+        E = np.radians(M)
         self.age = int(999 / 365 * (datetime.now() - get_g_d(JD)).days)
         for count in range(self.age):
-            while abs((M + e * sin(E)) - E) > 0.00001:  # последовательные приближения для эксцентрической аномалии
-                E = M + e * sin(E)
+            while abs((M + e * np.sin(E)) - E) > 0.00001:  # последовательные приближения для эксцентрической аномалии
+                E = M + e * np.sin(E)
             M += n * 1  # M = n(t−t0)+M0
-            r = a * (1 - e * cos(E))  # радиус-вектор
-            sin_v = (sqrt(1 - e ** 2) * sin(E)) / (1 - e * cos(E))
-            cos_v = (cos(E) - e) / (1 - e * cos(E))
-            sin_u = sin(radians(w)) * cos_v + cos(radians(w)) * sin_v
-            cos_u = cos(radians(w)) * cos_v - sin(radians(w)) * sin_v
-            x.append(r * (cos_u * cos(radians(O)) - sin_u * sin(radians(O)) * cos(radians(i))))
-            y.append(r * (cos_u * sin(radians(O)) + sin_u * cos(radians(O)) * cos(radians(i))))
-            z.append(r * (sin_u * sin(radians(i))))
+            r = a * (1 - e * np.cos(E))  # радиус-вектор
+            sin_v = (np.sqrt(1 - e ** 2) * np.sin(E)) / (1 - e * np.cos(E))
+            cos_v = (np.cos(E) - e) / (1 - e * np.cos(E))
+            sin_u = np.sin(np.radians(w)) * cos_v + np.cos(np.radians(w)) * sin_v
+            cos_u = np.cos(np.radians(w)) * cos_v - np.sin(np.radians(w)) * sin_v
+            x.append(r * (cos_u * np.cos(np.radians(O)) - sin_u * np.sin(np.radians(O)) * np.cos(np.radians(i))))
+            y.append(r * (cos_u * np.sin(np.radians(O)) + sin_u * np.cos(np.radians(O)) * np.cos(np.radians(i))))
+            z.append(r * (sin_u * np.sin(np.radians(i))))
             # V1 = sqrt(r / p) * e * sinv
             # V2 = sqrt(r / p) * (1 + e * cosv)
         self.X = list(reversed(x)) if self.at > 90 else x
@@ -84,6 +87,20 @@ class Body:
         else:
             self.small_body()
 
+    def type(self):
+        if self.m > 1e25:
+            self.outer_planets()
+            return 'Outer planets'
+        elif self.m > 1e23:
+            self.planet()
+            return 'Planets'
+        elif self.m > 1e20:
+            self.dwarf_planet()
+            return 'Dwarf planets'
+        else:
+            self.small_body()
+            return 'Small planets'
+
     def star(self):
         pass
 
@@ -99,7 +116,7 @@ class Body:
     def small_body(self, orbit=False, guide=False, size=1.5, width=.25):
         return self.paint(orbit=orbit, guide=guide, size=size, width=width)
 
-    def satellite(self, orbit=False, guide=False, size=4, width=1):
+    def satellite(self, orbit=False, guide=False, size=3, width=1):
         pass
 
     def paint(self, orbit=True, guide=True, size=4.0, width=1.0):
@@ -129,9 +146,27 @@ def get_j_d(day, month, year):
     return day + int((153 * c + 2) / 5) + 365 * b + int(b / 4) - int(b / 100) + int(b / 400) - 32045
 
 
-if __name__ == '__main__':
-    pass
-
 G = 6.67408e-11  # граивтационная постоянная м3·с−2·кг−1 или Н·м2·кг−2
 au = 149597870.700  # а.е. астрономическая единица
 C = 299792458  # скорость света м/с
+
+'''
+        T = str(round(T/1000, 2)) + ' yers' if T/1000 > 1 else str(round(365/100 * T/10, 2)) + ' days'
+
+        from numpy import sqrt, radians, sin, cos, arctan2
+        #E = M + e * sin(radians(M)) * (1 + e * cos(radians(M)))  # эксцентрическая аномалия
+        E = radians(M)
+        while abs((M + e * sin(E)) - E) > 0.00001:  # метод последовательных приближений для эксцентрической аномалии
+            E = M + e * sin(E)
+        xv = a * (cos(E) - e)  # ξ
+        yv = a * (sqrt(1 - e ** 2) * sin(E))  # η
+        zv = 0  # ζ
+        r = sqrt(xv ** 2 + yv ** 2 + zv ** 2)  # радиус-вектор r=a*(1-e*np.cos(E))  xv*xv+yv*yv+zv*zv
+        v = arctan2(yv, xv)  # истинная аномалия ν
+        u = radians(w) + v  # аргумент широты
+        xh = r * (cos(radians(O)) * cos(u) - sin(radians(O)) * sin(u) * cos(radians(i)))
+        yh = r * (sin(radians(O)) * cos(u) + cos(radians(O)) * sin(u) * cos(radians(i)))
+        zh = r * (sin(u) * sin(radians(i)))
+        ax.scatter(xh, yh, zh, c=color, s=size_scatter(m), edgecolors='black', linewidth=0.25)
+        ax.text(xh, yh, zh, name, fontsize=7.5)
+'''

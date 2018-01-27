@@ -213,24 +213,3 @@ if __name__ == '__main__':
     ARIES_t = ax.text(2e10, 0, 0, 'Aries', color='r', alpha=0.5)
 
     plt.show()
-
-'''
-        T = str(round(T/1000, 2)) + ' yers' if T/1000 > 1 else str(round(365/100 * T/10, 2)) + ' days'
-
-        from numpy import sqrt, radians, sin, cos, arctan2
-        #E = M + e * sin(radians(M)) * (1 + e * cos(radians(M)))  # эксцентрическая аномалия
-        E = radians(M)
-        while abs((M + e * sin(E)) - E) > 0.00001:  # метод последовательных приближений для эксцентрической аномалии
-            E = M + e * sin(E)
-        xv = a * (cos(E) - e)  # ξ
-        yv = a * (sqrt(1 - e ** 2) * sin(E))  # η
-        zv = 0  # ζ
-        r = sqrt(xv ** 2 + yv ** 2 + zv ** 2)  # радиус-вектор r=a*(1-e*np.cos(E))  xv*xv+yv*yv+zv*zv
-        v = arctan2(yv, xv)  # истинная аномалия ν
-        u = radians(w) + v  # аргумент широты
-        xh = r * (cos(radians(O)) * cos(u) - sin(radians(O)) * sin(u) * cos(radians(i)))
-        yh = r * (sin(radians(O)) * cos(u) + cos(radians(O)) * sin(u) * cos(radians(i)))
-        zh = r * (sin(u) * sin(radians(i)))
-        ax.scatter(xh, yh, zh, c=color, s=size_scatter(m), edgecolors='black', linewidth=0.25)
-        ax.text(xh, yh, zh, name, fontsize=7.5)
-'''

@@ -6,7 +6,7 @@ import pyqtgraph.opengl as gl
 from numpy import sqrt, radians, sin, cos, pi, vstack, array
 import csv
 
-from main import Star, Body
+from solpy import Star, Body
 
 
 au = 149597870.700  # а.е. астрономическая единица

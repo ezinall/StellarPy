@@ -1,10 +1,10 @@
 from setuptools import setup, find_packages
 from os.path import join, dirname
-import solpy
+import stellarpy
 
 setup(
     name='SolPy',
-    version=solpy.__version__,
+    version=stellarpy.__version__,
     description='Python Planetary System',
     author='Ruslan Vasilevskiy',
     author_email='vasilevskiy.r@gmail.com',

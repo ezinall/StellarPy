@@ -3,7 +3,7 @@ from os.path import join, dirname
 import stellarpy
 
 setup(
-    name='SolPy',
+    name='StellarPy',
     version=stellarpy.__version__,
     description='Python Planetary System',
     author='Ruslan Vasilevskiy',
@@ -11,9 +11,9 @@ setup(
     license='BSD',
     platforms='any',
     url='https://github.com/ezinall/SolPy',
-    packages=find_packages(include=['solpy', 'LICENSE']),
+    packages=find_packages(),
     long_description=open(join(dirname(__file__), 'README.rst')).read(),
-    install_requires=['numpy>=1.13.3'],
+    install_requires=['numpy>=1.13.3', 'pyqtgraph>=0.10.0'],
     python_requires='==3, >=3.4',
     keywords=['space', 'plot', 'science'],
     classifiers=[

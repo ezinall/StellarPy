@@ -7,10 +7,10 @@ from datetime import datetime
 class Star:
     def __init__(self, object_name, m, color=(1, 1, 0, 1)):
         self.name = object_name
-        self.M = m  # масса
-        self.x = [0]
-        self.y = [0]
-        self.z = [0]
+        self.m = m  # масса
+        self.X = [0]
+        self.Y = [0]
+        self.Z = [0]
         self.color = color
         # pos = gl.GLScatterPlotItem(pos=array([0, 0, 0]), color=color, size=10)
         # pos.setGLOptions('translucent')
@@ -44,7 +44,7 @@ class Body:
         self.guide = True
         self.size = None
         self.width = None
-        k = G * (self.major.M + m)  # µ гравитационный параметр
+        k = G * (self.major.m + m)  # µ гравитационный параметр
         n = np.sqrt(k / a ** 3)  # среднее движение
         self.T = 2 * np.pi / n  # период обращения sqrt(((4 * pi**2)/(G * (SUN.M + m))) * a**3) Кеплер 3
         x, y, z = [], [], []
@@ -86,20 +86,6 @@ class Body:
             self.dwarf_planet()
         else:
             self.small_body()
-
-    def type(self):
-        if self.m > 1e25:
-            self.outer_planets()
-            return 'Outer planets'
-        elif self.m > 1e23:
-            self.planet()
-            return 'Planets'
-        elif self.m > 1e20:
-            self.dwarf_planet()
-            return 'Dwarf planets'
-        else:
-            self.small_body()
-            return 'Small planets'
 
     def star(self):
         pass

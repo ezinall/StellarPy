@@ -1,7 +1,7 @@
 from stellarpy import Star, Body, Make
 import sys
 
-au = 149597870
+AU = 149597870
 
 
 def test():
@@ -48,21 +48,25 @@ def test():
                    O=110.30347, M=14.53, JD=2451545.0)
     Make(PLUTO, color=(0.3, 0, 0, 1))
 
-    HAUMEA = Body('Haumea', major=SUN, m=4.006e21, a=42.98492 * au, e=0.1975233, i=28.201975,
-                    w=240.582838, O=121.900456, M=205.22317, JD=2456000.5)
+    HAUMEA = Body('Haumea', major=SUN, m=4.006e21, a=42.98492 * AU, e=0.1975233, i=28.201975,
+                  w=240.582838, O=121.900456, M=205.22317, JD=2456000.5)
     Make(HAUMEA, color=(.5, .5, .5, 1))
 
-    MAKEMAKE = Body('Makemake', major=SUN, m=3e21, a=45.436301 * au, e=0.16254481, i=29.011819,
-                      w=296.534594, O=79.305348, M=153.854714, JD=2456000.5)
+    MAKEMAKE = Body('Makemake', major=SUN, m=3e21, a=45.436301 * AU, e=0.16254481, i=29.011819,
+                    w=296.534594, O=79.305348, M=153.854714, JD=2456000.5)
     Make(MAKEMAKE, color=(0.3, 0, 0, 1))
 
-    ERIS = Body('Eris', major=SUN, m=1.66e22, a=67.781 * au, e=0.44068, i=44.0445, w=150.977, O=35.9531,
-                  M=204.16, JD=2457000.5)
+    ERIS = Body('Eris', major=SUN, m=1.66e22, a=67.781 * AU, e=0.44068, i=44.0445, w=150.977, O=35.9531,
+                M=204.16, JD=2457000.5)
     Make(ERIS, color=(.5, .5, .5, 1))
 
-    SEDNA = Body('Sedna', major=SUN, m=8.3e21, a=541.429506 * au, e=0.8590486, i=11.927945, w=310.920993,
-                   O=144.377238, M=358.190921, JD=2456000.5)
+    SEDNA = Body('Sedna', major=SUN, m=8.3e21, a=541.429506 * AU, e=0.8590486, i=11.927945, w=310.920993,
+                 O=144.377238, M=358.190921, JD=2456000.5)
     Make(SEDNA, color=(1, 1, 1, 1))
+
+    GOBLIN = Body('Goblin', major=SUN, m=1e22, a=1051.1553620972 * AU, e=0.938315969096, i=11.663860890828,
+                  w=118.31762541793, O=300.89644655575, M=359.4, JD=2458200.5)
+    Make(GOBLIN, color=(1, 1, 1, 1))
 
     from pyqtgraph.Qt import QtCore, QtGui
     if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):

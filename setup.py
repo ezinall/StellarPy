@@ -10,7 +10,7 @@ setup(
     author_email='vasilevskiy.r@gmail.com',
     license='BSD',
     platforms='any',
-    url='https://github.com/ezinall/SolPy',
+    url='https://github.com/ezinall/StellarPy',
     packages=find_packages(),
     long_description=open(join(dirname(__file__), 'README.rst')).read(),
     install_requires=['numpy>=1.13.3', 'pyqtgraph>=0.10.0'],

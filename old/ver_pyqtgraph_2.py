@@ -138,7 +138,7 @@ def get_j_d(day, month, year):
 
 
 G = 6.67408e-11  # граивтационная постоянная м3·с−2·кг−1 или Н·м2·кг−2
-au = 149597870.700  # а.е. астрономическая единица
+AU = 149597870.700  # а.е. астрономическая единица
 C = 299792458  # скорость света м/с
 
 # настройки окна
@@ -205,19 +205,22 @@ PLUTO = Object('Pluto', color=(0.3, 0, 0, 1), m=1.303e22, at=119.591,
                a=5906440628, e=0.24880766, i=17.14175, w=113.76329, O=110.30347, M=14.53,
                JD=2451545.0)
 HAUMEA = Object('Haumea', color=(.5, .5, .5, 1), m=4.006e21, at=0,
-                a=42.98492 * au, e=0.1975233, i=28.201975, w=240.582838, O=121.900456, M=205.22317,
+                a=42.98492 * AU, e=0.1975233, i=28.201975, w=240.582838, O=121.900456, M=205.22317,
                 JD=2456000.5)
 MAKEMAKE = Object('Makemake', color=(0.3, 0, 0, 1), m=3e21, at=0,
-                  a=45.436301 * au, e=0.16254481, i=29.011819, w=296.534594, O=79.305348, M=153.854714,
+                  a=45.436301 * AU, e=0.16254481, i=29.011819, w=296.534594, O=79.305348, M=153.854714,
                   JD=2456000.5)
 ERIS = Object('Eris', color=(.5, .5, .5, 1), m=1.66e22, at=0,
-              a=67.781 * au, e=0.44068, i=44.0445, w=150.977, O=35.9531, M=204.16,
+              a=67.781 * AU, e=0.44068, i=44.0445, w=150.977, O=35.9531, M=204.16,
               JD=2457000.5)
 SEDNA = Object('Sedna', color=(.5, .5, .5, 1), m=8.3e21, at=0,
-               a=541.429506 * au, e=0.8590486, i=11.927945, w=310.920993, O=144.377238, M=358.190921,
+               a=541.429506 * AU, e=0.8590486, i=11.927945, w=310.920993, O=144.377238, M=358.190921,
                JD=2456000.5)
+GOBLIN = Object('Goblin', color=(.5, .5, .5, 1), m=1e22, at=0,
+                a=1051.1553620972 * AU, e=0.938315969096, i=11.663860890828, w=118.31762541793, O=300.89644655575, M=359.4,
+                JD=2458200.5)
 
-BODIES = [MERCURY, VENUS, EARTH, MARS, JUPITER, SATURN, URANUS, NEPTUNE, CARES, PLUTO, HAUMEA, MAKEMAKE, ERIS, SEDNA]
+BODIES = [MERCURY, VENUS, EARTH, MARS, JUPITER, SATURN, URANUS, NEPTUNE, CARES, PLUTO, HAUMEA, MAKEMAKE, ERIS, SEDNA, GOBLIN]
 
 try:
     with open('SBD.csv') as csvfile:
@@ -226,7 +229,7 @@ try:
         for row in objects:
             if row[7]:
                 try:
-                    BODIES.append(Object(row[7], m=1e20, a=float(row[0]) * au, e=float(row[1]), i=float(row[2]),
+                    BODIES.append(Object(row[7], m=1e20, a=float(row[0]) * AU, e=float(row[1]), i=float(row[2]),
                                          w=float(row[3]), O=float(row[4]), M=float(row[5]), JD=float(row[6])))
                 except ValueError:
                     continue
@@ -267,3 +270,25 @@ if __name__ == '__main__':
 
 # import pyqtgraph.examples
 # pyqtgraph.examples.run()
+
+
+'''
+        T = str(round(T/1000, 2)) + ' yers' if T/1000 > 1 else str(round(365/100 * T/10, 2)) + ' days'
+
+        from numpy import sqrt, radians, sin, cos, arctan2
+        #E = M + e * sin(radians(M)) * (1 + e * cos(radians(M)))  # эксцентрическая аномалия
+        E = radians(M)
+        while abs((M + e * sin(E)) - E) > 0.00001:  # метод последовательных приближений для эксцентрической аномалии
+            E = M + e * sin(E)
+        xv = a * (cos(E) - e)  # ξ
+        yv = a * (sqrt(1 - e ** 2) * sin(E))  # η
+        zv = 0  # ζ
+        r = sqrt(xv ** 2 + yv ** 2 + zv ** 2)  # радиус-вектор r=a*(1-e*np.cos(E))  xv*xv+yv*yv+zv*zv
+        v = arctan2(yv, xv)  # истинная аномалия ν
+        u = radians(w) + v  # аргумент широты
+        xh = r * (cos(radians(O)) * cos(u) - sin(radians(O)) * sin(u) * cos(radians(i)))
+        yh = r * (sin(radians(O)) * cos(u) + cos(radians(O)) * sin(u) * cos(radians(i)))
+        zh = r * (sin(u) * sin(radians(i)))
+        ax.scatter(xh, yh, zh, c=color, s=size_scatter(m), edgecolors='black', linewidth=0.25)
+        ax.text(xh, yh, zh, name, fontsize=7.5)
+'''
